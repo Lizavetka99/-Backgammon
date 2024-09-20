@@ -1,5 +1,6 @@
-import pygame
+import pygame, Button
 import image_settings
+from Dice import Dice
 
 pygame.init()
 
@@ -26,22 +27,26 @@ field = pygame.transform.scale(field_image,
                                 img_data["field"]["height"]))
 
 dice_button_image = pygame.image.load("Assets/dice_button.png")
-dice_button = pygame.transform.scale(dice_button_image,
-                                     (img_data["dice_button"]["width"],
-                                      img_data["dice_button"]["height"]))
+dice_button = Button.Button(dice_button_image, "dice_button")
 
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+        # Проверка, нажата ли кнопка
+            if dice_button.rect.collidepoint(event.pos):
+                dice_table.blit(Dice.throw(), (Dice.x_pos_1, Dice.y_pos_1))
+                dice_table.blit(Dice.throw(), (Dice.x_pos_2, Dice.y_pos_2))
     screen.fill((0, 0, 0))
 
     # adding game elements to screen
     screen.blit(background, img_data["background"]["pos"])
     screen.blit(field, img_data["field"]["pos"])
     screen.blit(dice_table, img_data["dice_table"]["pos"])
-    screen.blit(dice_button, img_data["dice_button"]["pos"])
+    screen.blit(dice_button.texture, dice_button.pos)
+
 
     pygame.display.flip()
 
