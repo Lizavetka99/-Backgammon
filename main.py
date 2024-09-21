@@ -1,4 +1,4 @@
-import pygame, Button
+import pygame, Button, Chip, Chip_data
 import image_settings
 from Dice import Dice
 
@@ -29,6 +29,9 @@ field = pygame.transform.scale(field_image,
 dice_button_image = pygame.image.load("Assets/dice_button.png")
 dice_button = Button.Button(dice_button_image, "dice_button")
 
+white_chip = Chip.Chip(1,1, "white")
+black_chip = Chip.Chip(1,1, "black")
+
 running = True
 while running:
     for event in pygame.event.get():
@@ -46,7 +49,10 @@ while running:
     screen.blit(field, img_data["field"]["pos"])
     screen.blit(dice_table, img_data["dice_table"]["pos"])
     screen.blit(dice_button.texture, dice_button.pos)
-
+    for coord in Chip_data.white_coordinates_start:
+        field.blit(white_chip.texture, coord)
+    for coord in Chip_data.black_coordinates_start:
+        field.blit(black_chip.texture, coord)
 
     pygame.display.flip()
 

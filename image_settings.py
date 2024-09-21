@@ -22,4 +22,8 @@ images_data = {
         "height": 200,
         "pos": (WIDTH - 440, HEIGHT - 200)
     },
+    "chip": {
+        "width": 35,
+        "height": 35
+    }
 }
