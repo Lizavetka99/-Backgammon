@@ -13,4 +13,4 @@ textures_dict = {
 
 
 white_coordinates_start = [ (60, 620-15*i) for i in range(15)]
-black_coordinates_start = [ (615, 70+15*i) for i in range(15)]
+black_coordinates_start = [ (620, 70+15*i) for i in range(15)]

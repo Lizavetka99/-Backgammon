@@ -22,6 +22,11 @@ images_data = {
         "height": 200,
         "pos": (WIDTH - 440, HEIGHT - 200)
     },
+    "score_desk":{
+        "width": 210,
+        "height": 200,
+        "pos": (WIDTH - 320, 20)
+    },
     "chip": {
         "width": 35,
         "height": 35
