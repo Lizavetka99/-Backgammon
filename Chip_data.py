@@ -3,11 +3,22 @@ from image_settings import images_data as img_data
 
 CHIPS_AMOUNT = 15
 
+help_chips = [
+(160, 615), (205, 615), (250, 615), (295, 615), (340, 615),
+(385, 615), (490, 615), (535, 615), (580, 615), (625, 615),
+(670, 615), (715, 615), (715, 75), (670, 75), (625, 75), (580, 615),
+(535, 75), (490, 75), (385, 75), (340, 75), (295, 75), (250, 75),
+(205, 75), (160, 75)
+]
+
 textures_dict = {
     "white": pygame.transform.scale(pygame.image.load("Assets/white_chip.png"),
                                      (img_data["chip"]["width"],
                                       img_data["chip"]["height"])),
     "black": pygame.transform.scale(pygame.image.load("Assets/black_chip.png"),
+                                     (img_data["chip"]["width"],
+                                      img_data["chip"]["height"])),
+    "help": pygame.transform.scale(pygame.image.load("Assets/help_chip.png"),
                                      (img_data["chip"]["width"],
                                       img_data["chip"]["height"])),
 }

@@ -14,4 +14,5 @@ class Dice:
     @staticmethod
     def throw():
         Dice.is_throw = True
-        return Dice.dice_textures[random.randint(0, 5)]
+        value = random.randint(0, 5)
+        return (Dice.dice_textures[value], value)
