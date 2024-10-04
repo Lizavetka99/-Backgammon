@@ -1,5 +1,7 @@
-import pygame, Button, Chip, Chip_data
-
+import pygame
+import Button
+import Chip
+import Chip_data
 import Player
 import image_settings
 from Dice import Dice
@@ -32,27 +34,53 @@ field = pygame.transform.scale(field_image,
 score_desk_image = pygame.image.load("Assets/score_desk.png")
 score_desk = pygame.transform.scale(score_desk_image,
                                     (img_data["score_desk"]["width"],
-                                    img_data["score_desk"]["height"]))
+                                     img_data["score_desk"]["height"]))
 
 dice_button_image = pygame.image.load("Assets/dice_button.png")
 dice_button = Button.Button(dice_button_image, "dice_button")
 
-white_chip = Chip.Chip(1, 1, "white")
-black_chip = Chip.Chip(1, 1, "black")
+white_chips = Chip_data.white_chips
+black_chips = Chip_data.black_chips
 
+is_game_start = False
 running = True
+selected_chip = None
+
+
+# Function to spawn chips only once
+def spawn_chips():
+    Chip_data.spawn_chips(field)
+
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-        # Проверка, нажата ли кнопка
+            # Проверка, нажата ли кнопка
             if dice_button.rect.collidepoint(event.pos):
                 dice_1, dice_2 = Dice.throw(), Dice.throw()
                 player.dice_values[0] = dice_1
                 player.dice_values[1] = dice_2
                 dice_table.blit(dice_1, (Dice.x_pos_1, Dice.y_pos_1))
                 dice_table.blit(dice_2, (Dice.x_pos_2, Dice.y_pos_2))
+
+            # Проверка, выбрана ли фишка
+            for chip in white_chips + black_chips:
+                if chip.rect.collidepoint(event.pos):
+                    selected_chip = chip
+                    offset_x = chip.rect.x - event.pos[0]
+                    offset_y = chip.rect.y - event.pos[1]
+                    break
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            selected_chip = None
+
+        elif event.type == pygame.MOUSEMOTION:
+            if selected_chip:
+                selected_chip.rect.x = event.pos[0] + offset_x
+                selected_chip.rect.y = event.pos[1] + offset_y
+
     screen.fill((0, 0, 0))
 
     # adding game elements to screen
@@ -61,10 +89,15 @@ while running:
     screen.blit(dice_table, img_data["dice_table"]["pos"])
     screen.blit(score_desk, img_data["score_desk"]["pos"])
     screen.blit(dice_button.texture, dice_button.pos)
-    for coord in Chip_data.white_coordinates_start:
-        field.blit(white_chip.texture, coord)
-    for coord in Chip_data.black_coordinates_start:
-        field.blit(black_chip.texture, coord)
+
+    # spawn chips only once
+    if not is_game_start:
+        spawn_chips()
+        is_game_start = True
+
+    # draw chips
+    for chip in white_chips + black_chips:
+        screen.blit(chip.texture, chip.rect)
 
     pygame.display.flip()
 
