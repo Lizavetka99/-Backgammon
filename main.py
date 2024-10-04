@@ -53,7 +53,7 @@ selected_chip = None
 def spawn_chips():
     Chip_data.spawn_chips(field)
 
-
+previous_coord = (0, 0)
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -70,6 +70,7 @@ while running:
             # Проверка, выбрана ли фишка
             for chip in white_chips + black_chips:
                 if chip.rect.collidepoint(event.pos):
+                    previous_coord = chip.rect.copy()
                     selected_chip = chip
                     print(player.dice_values)
                     help_chips = chip.create_help_chips(player.dice_values)
@@ -78,7 +79,19 @@ while running:
                     break
 
         elif event.type == pygame.MOUSEBUTTONUP:
+            if selected_chip != None:
+                is_good = False
+                for help_chip in help_chips:
+                    if selected_chip.rect.colliderect(help_chip):
+                        selected_chip.rect = help_chip.rect
+                        selected_chip.position_number += help_chip.position_number
+                        is_good = True
+                        break
+                if not is_good:
+                    selected_chip.rect = previous_coord
             selected_chip = None
+            help_chips = []
+
 
         elif event.type == pygame.MOUSEMOTION:
             if selected_chip:

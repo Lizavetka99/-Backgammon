@@ -19,9 +19,15 @@ class Chip:
         helps_chips = []
 
         x, y = Chip_data.help_chips[self.position_number + dice_values[0] + 1]
-        helps_chips.append(Chip(x, y, "help"))
+        help = Chip(x, y, "help")
+        help.position_number = dice_values[0] + 1
+        helps_chips.append(help)
         x, y = Chip_data.help_chips[self.position_number + dice_values[1] + 1]
-        helps_chips.append(Chip(x, y, "help"))
+        help = Chip(x, y, "help")
+        help.position_number = dice_values[1] + 1
+        helps_chips.append(help)
         x, y = Chip_data.help_chips[self.position_number + sum(dice_values) + 2]
-        helps_chips.append(Chip(x, y, "help"))
+        help = Chip(x, y, "help")
+        help.position_number = sum(dice_values) + 2
+        helps_chips.append(help)
         return helps_chips
