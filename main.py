@@ -9,11 +9,11 @@ import image_settings
 from Dice import Dice
 
 pygame.init()
-background = pygame.image.load("Assets/field.jpg")
 
-screen = Screen.Screen()
-while True:
-    screen.screen.blit(background, (0, 0))
+# window size settings
+screen_width = image_settings.WIDTH
+screen_height = image_settings.HEIGHT
+screen = pygame.display.set_mode((screen_width, screen_height))
 
 # game elements initialization
 player = Player.Player("white")
