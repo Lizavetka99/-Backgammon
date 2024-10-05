@@ -18,16 +18,16 @@ class Chip:
     def create_help_chips(self, dice_values):
         helps_chips = []
 
-        x, y = Chip_data.help_chips[self.position_number + dice_values[0] + 1]
+        x, y = Chip_data.help_chips[(self.position_number + dice_values[0] + 1) % 24]
         help = Chip(x, y, "help")
-        help.position_number = dice_values[0] + 1
+        help.position_number = (dice_values[0] + 1 + self.position_number) % 24
         helps_chips.append(help)
-        x, y = Chip_data.help_chips[self.position_number + dice_values[1] + 1]
+        x, y = Chip_data.help_chips[(self.position_number + dice_values[1] + 1) % 24]
         help = Chip(x, y, "help")
-        help.position_number = dice_values[1] + 1
+        help.position_number = (dice_values[1] + 1 + self.position_number) % 24
         helps_chips.append(help)
-        x, y = Chip_data.help_chips[self.position_number + sum(dice_values) + 2]
+        x, y = Chip_data.help_chips[(self.position_number + sum(dice_values) + 2) % 24]
         help = Chip(x, y, "help")
-        help.position_number = sum(dice_values) + 2
+        help.position_number = (sum(dice_values) + 2 + self.position_number) % 24
         helps_chips.append(help)
         return helps_chips

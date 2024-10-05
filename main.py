@@ -84,7 +84,7 @@ while running:
                 for help_chip in help_chips:
                     if selected_chip.rect.colliderect(help_chip):
                         selected_chip.rect = help_chip.rect
-                        selected_chip.position_number += help_chip.position_number
+                        selected_chip.position_number = help_chip.position_number
                         is_good = True
                         break
                 if not is_good:
@@ -118,5 +118,6 @@ while running:
         screen.blit(chip.texture, chip.rect)
 
     pygame.display.flip()
-
+    for help in help_chips:
+        print(help.position_number)
 pygame.quit()
