@@ -1,3 +1,5 @@
+from typing import List
+
 import pygame, Chip
 from image_settings import images_data as img_data
 
@@ -27,8 +29,9 @@ textures_dict = {
 white_coordinates_start = [ (160, 615-15*i) for i in range(15)]
 black_coordinates_start = [ (717, 75+15*i) for i in range(15)]
 
-white_chips = []
-black_chips = []
+white_chips : List[Chip] = []
+black_chips : List[Chip] = []
+
 
 
 def spawn_chips(field):
@@ -41,5 +44,5 @@ def spawn_chips(field):
         black_chip.position_number = 13 - 1
         black_chips.append(black_chip)
 
-
+    black_chips[CHIPS_AMOUNT - 1].can_move = True
 
