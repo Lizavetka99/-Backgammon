@@ -59,6 +59,10 @@ def spawn_chips():
 
 previous_coord = (0, 0)
 while running:
+    if player.count_of_thrown == 15:
+        print("GameOver")
+        break
+
     if enemy.is_enemy_move and not enemy.is_enemy_move_throw_dices:
         enemy.throw_dices()
         dice_table.blit(enemy.dice_1[0], (Dice.x_pos_1, Dice.y_pos_1))
@@ -68,8 +72,6 @@ while running:
 
     if enemy.is_enemy_move and enemy.is_enemy_move_throw_dices:
         enemy.make_move(black_chips, white_chips)
-        
-        print(Chip.count_of_occupied)
         is_player_move_throw_dices = False
         is_player_move = True
 
@@ -93,23 +95,14 @@ while running:
                         if chip.rect.collidepoint(event.pos):
                             previous_coord = chip.rect.copy()
                             selected_chip = chip
-
                             help_chips = chip.create_help_chips(player.dice_values, black_chips, white_chips)
 
                             # ВЫБРАСЫВАНИЕ ЗА ПРЕДЕЛЫ ДОСКИ
                             for value in player.dice_values:
-                                print("sadasdasdds", value + chip.count_moves)
-
                                 if (value + 1 + chip.count_moves) == 24:
-
                                     throw_chip = Chip.Chip(440, 500, "help")
                                     throw_chip.is_throw = True
                                     help_chips.append(throw_chip)
-
-
-
-
-                            print("МЫ", len(help_chips))
                             offset_x = chip.rect.x - event.pos[0]
                             offset_y = chip.rect.y - event.pos[1]
                             break
@@ -117,6 +110,10 @@ while running:
         elif event.type == pygame.MOUSEBUTTONUP:
             if selected_chip != None:
                 is_good = False
+                if len(help_chips) == 0:
+                    is_player_move = False
+                    enemy.is_enemy_move = True
+                    enemy.is_enemy_move_throw_dices = True
                 for help_chip in help_chips:
                     if selected_chip.rect.colliderect(help_chip):
                         if help_chip.is_throw:
@@ -125,10 +122,8 @@ while running:
                         for c in black_chips:
                             if c.y == selected_chip.y - 15 and c.x == selected_chip.x:
                                 c.can_move = True
-                        print(abs(help_chip.position_number - selected_chip.position_number), "ляляля")
 
                         selected_chip.count_moves += help_chip.current_dice_value
-                        print("теперь фиша", selected_chip.count_moves)
                         selected_chip.rect = help_chip.rect
                         selected_chip.x = help_chip.x
                         selected_chip.y = help_chip.y
@@ -145,8 +140,6 @@ while running:
                                 c.can_move = False
                         is_good = True
                         is_player_move = False
-                        print(selected_chip.x, selected_chip.y)
-
                         Chip.count_of_occupied[selected_chip.position_number] += 1
                         Chip.owner_of_occupied[selected_chip.position_number] = "black"
 
@@ -169,12 +162,20 @@ while running:
 
     screen.fill((0, 0, 0))
 
+    f1 = pygame.font.SysFont('arial', 50)
+    text1 = f1.render(str(player.count_of_thrown), 1, (255, 255, 255))
+    f2 = pygame.font.SysFont('arial', 50)
+    text2 = f2.render(str(0), 1, (255, 255, 255))
+
+
+
     # adding game elements to screen
     screen.blit(background, img_data["background"]["pos"])
     screen.blit(field, img_data["field"]["pos"])
     screen.blit(dice_table, img_data["dice_table"]["pos"])
     screen.blit(score_desk, img_data["score_desk"]["pos"])
     screen.blit(dice_button.texture, dice_button.pos)
+    screen.blit(text1, (850, 70))
 
     # spawn chips only once
     if not is_game_start:

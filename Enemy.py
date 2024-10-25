@@ -16,6 +16,9 @@ class Enemy:
         for chip in Chip_data.white_chips[::-1]:
             helps = chip.create_help_chips([self.dice_1[1], self.dice_2[1]], black_chips, white_chips)
             print("ВРАГИ ПОМОЩЬ", len(helps))
+            if len(helps) == 0:
+                self.is_enemy_move = False
+                self.is_enemy_move_throw_dices = False
             for help in helps:
                 print(help.x, help.y)
             if len(helps) > 0:
