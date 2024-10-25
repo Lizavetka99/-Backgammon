@@ -22,6 +22,7 @@ class Enemy:
                 Chip.count_of_occupied[chip.position_number] -= 1
                 if Chip.count_of_occupied[chip.position_number] == 0:
                     Chip.owner_of_occupied[chip.position_number] = None
+                chip.count_moves += helps[0].current_dice_value
                 chip.rect = helps[0].rect
 
                 chip.x = helps[0].x

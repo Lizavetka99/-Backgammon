@@ -68,6 +68,7 @@ while running:
 
     if enemy.is_enemy_move and enemy.is_enemy_move_throw_dices:
         enemy.make_move(black_chips, white_chips)
+        
         print(Chip.count_of_occupied)
         is_player_move_throw_dices = False
         is_player_move = True
@@ -94,6 +95,20 @@ while running:
                             selected_chip = chip
 
                             help_chips = chip.create_help_chips(player.dice_values, black_chips, white_chips)
+
+                            # ВЫБРАСЫВАНИЕ ЗА ПРЕДЕЛЫ ДОСКИ
+                            for value in player.dice_values:
+                                print("sadasdasdds", value + chip.count_moves)
+
+                                if (value + 1 + chip.count_moves) == 24:
+
+                                    throw_chip = Chip.Chip(440, 500, "help")
+                                    throw_chip.is_throw = True
+                                    help_chips.append(throw_chip)
+
+
+
+
                             print("МЫ", len(help_chips))
                             offset_x = chip.rect.x - event.pos[0]
                             offset_y = chip.rect.y - event.pos[1]
@@ -104,15 +119,20 @@ while running:
                 is_good = False
                 for help_chip in help_chips:
                     if selected_chip.rect.colliderect(help_chip):
-
+                        if help_chip.is_throw:
+                            black_chips.remove(selected_chip)
+                            player.count_of_thrown += 1
                         for c in black_chips:
                             if c.y == selected_chip.y - 15 and c.x == selected_chip.x:
                                 c.can_move = True
+                        print(abs(help_chip.position_number - selected_chip.position_number), "ляляля")
 
-
+                        selected_chip.count_moves += help_chip.current_dice_value
+                        print("теперь фиша", selected_chip.count_moves)
                         selected_chip.rect = help_chip.rect
                         selected_chip.x = help_chip.x
                         selected_chip.y = help_chip.y
+
                         Chip.count_of_occupied[
                             selected_chip.position_number] -= 1
                         if Chip.count_of_occupied[
@@ -144,6 +164,8 @@ while running:
             if selected_chip and is_player_move:
                 selected_chip.rect.x = event.pos[0] + offset_x
                 selected_chip.rect.y = event.pos[1] + offset_y
+
+
 
     screen.fill((0, 0, 0))
 
