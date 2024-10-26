@@ -61,7 +61,7 @@ def spawn_chips():
 previous_coord = (0, 0)
 while running:
     if player.count_of_thrown == 15:
-        print("GameOver")
+
         break
 
     if enemy.is_enemy_move and not enemy.is_enemy_move_throw_dices:
@@ -110,7 +110,7 @@ while running:
 
 
 
-                            print([c.current_dice_value for c in help_chips])
+
                             # ВЫБРАСЫВАНИЕ ЗА ПРЕДЕЛЫ ДОСКИ
 
                             offset_x = chip.rect.x - event.pos[0]
@@ -130,7 +130,9 @@ while running:
                     is_player_move = False
                     enemy.is_enemy_move = True
                     enemy.is_enemy_move_throw_dices = True
-                print([c.current_dice_value for c in help_chips], "aaaaaa")
+
+
+
                 for help_chip in help_chips:
 
                     if selected_chip.rect.colliderect(help_chip):
@@ -143,7 +145,7 @@ while running:
                                 player.dice_values = [-1, -1]
                             else:
                                 player_moves -= 1
-                                print("fff", help_chip.current_dice_value-1, player.dice_values)
+
                                 if (help_chip.current_dice_value-1 in player.dice_values):
                                     player.dice_values.remove(
                                         help_chip.current_dice_value-1)
@@ -153,14 +155,14 @@ while running:
 
 
 
-                        print(player.dice_values, player_moves)
+
                         for c in black_chips:
                             if c.y == selected_chip.y - 15 and c.x == selected_chip.x:
                                 c.can_move = True
                         if not(is_moves_added):
                             selected_chip.count_moves += help_chip.current_dice_value
                             is_moves_added = True
-                        print(selected_chip.count_moves, "dklsadka")
+
                         selected_chip.rect = help_chip.rect
                         selected_chip.x = help_chip.x
                         selected_chip.y = help_chip.y

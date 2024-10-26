@@ -40,7 +40,7 @@ class Chip:
     def create_help_chips(self, dice_values, black_chips, white_chips, player):
         helps_chips = []
         is_thrown = False
-        for value in player.dice_values + [sum[player.dice_values]]:
+        for value in (player.dice_values + [sum(player.dice_values)]):
             if (value + 1 + self.count_moves) == 24:
                 throw_chip = Chip(440, 500, "help")
                 throw_chip.is_throw = True
