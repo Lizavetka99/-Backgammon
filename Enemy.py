@@ -8,13 +8,15 @@ class Enemy:
         self.is_enemy_move_throw_dices = False
         self.dice_1 = []
         self.dice_2 = []
+        self.dice_values = []
     def throw_dices(self):
         self.dice_1, self.dice_2 = Dice.throw(), Dice.throw()
         self.is_enemy_move_throw_dices = True
+        self.dice_values = [self.dice_1[1], self.dice_2[1]]
 
     def make_move(self, black_chips, white_chips):
         for chip in Chip_data.white_chips[::-1]:
-            helps = chip.create_help_chips([self.dice_1[1], self.dice_2[1]], black_chips, white_chips)
+            helps = chip.create_help_chips([self.dice_1[1], self.dice_2[1]], black_chips, white_chips, self)
             print("ВРАГИ ПОМОЩЬ", len(helps))
             if len(helps) == 0:
                 self.is_enemy_move = False

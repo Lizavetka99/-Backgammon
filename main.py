@@ -50,6 +50,7 @@ running = True
 selected_chip = None
 is_player_move = True
 is_player_move_throw_dices = False
+player_moves = 0
 
 enemy = Enemy.Enemy()
 
@@ -82,6 +83,11 @@ while running:
             # Проверка, нажата ли кнопка
             if dice_button.rect.collidepoint(event.pos) and is_player_move and not is_player_move_throw_dices:
                 dice_1, dice_2 = Dice.throw(), Dice.throw()
+                if (dice_1[1] != dice_2[1]):
+                    player_moves = 2
+                else:
+                    player_moves = 4
+
                 player.dice_values[0] = dice_1[1]
                 player.dice_values[1] = dice_2[1]
                 dice_table.blit(dice_1[0], (Dice.x_pos_1, Dice.y_pos_1))
@@ -89,41 +95,72 @@ while running:
                 is_player_move_throw_dices = True
 
             # Проверка, выбрана ли фишка
+
             if is_player_move and is_player_move_throw_dices:
+                can_any_move = False
                 for chip in black_chips:
-                    if chip.can_move:
+
+                    if chip.can_move and len(chip.create_help_chips(player.dice_values, black_chips, white_chips, player)) !=0:
+                        can_any_move = True
                         if chip.rect.collidepoint(event.pos):
                             previous_coord = chip.rect.copy()
                             selected_chip = chip
-                            help_chips = chip.create_help_chips(player.dice_values, black_chips, white_chips)
 
+                            help_chips = chip.create_help_chips(player.dice_values, black_chips, white_chips, player)
+
+
+
+                            print([c.current_dice_value for c in help_chips])
                             # ВЫБРАСЫВАНИЕ ЗА ПРЕДЕЛЫ ДОСКИ
-                            for value in player.dice_values:
-                                if (value + 1 + chip.count_moves) == 24:
-                                    throw_chip = Chip.Chip(440, 500, "help")
-                                    throw_chip.is_throw = True
-                                    help_chips.append(throw_chip)
+
                             offset_x = chip.rect.x - event.pos[0]
                             offset_y = chip.rect.y - event.pos[1]
                             break
+                if not can_any_move:
+                    is_player_move = False
+                    enemy.is_enemy_move = True
+                    enemy.is_enemy_move_throw_dices = False
 
         elif event.type == pygame.MOUSEBUTTONUP:
+
             if selected_chip != None:
                 is_good = False
+                is_moves_added = False
                 if len(help_chips) == 0:
                     is_player_move = False
                     enemy.is_enemy_move = True
                     enemy.is_enemy_move_throw_dices = True
+                print([c.current_dice_value for c in help_chips], "aaaaaa")
                 for help_chip in help_chips:
+
                     if selected_chip.rect.colliderect(help_chip):
                         if help_chip.is_throw:
                             black_chips.remove(selected_chip)
                             player.count_of_thrown += 1
+                        if player.dice_values[0] != player.dice_values[1]:
+                            if (sum(player.dice_values) == help_chip.current_dice_value-2):
+                                player_moves = 0
+                                player.dice_values = [-1, -1]
+                            else:
+                                player_moves -= 1
+                                print("fff", help_chip.current_dice_value-1, player.dice_values)
+                                if (help_chip.current_dice_value-1 in player.dice_values):
+                                    player.dice_values.remove(
+                                        help_chip.current_dice_value-1)
+                                    player.dice_values.append(-1)
+                        else:
+                            player_moves -= 1
+
+
+
+                        print(player.dice_values, player_moves)
                         for c in black_chips:
                             if c.y == selected_chip.y - 15 and c.x == selected_chip.x:
                                 c.can_move = True
-
-                        selected_chip.count_moves += help_chip.current_dice_value
+                        if not(is_moves_added):
+                            selected_chip.count_moves += help_chip.current_dice_value
+                            is_moves_added = True
+                        print(selected_chip.count_moves, "dklsadka")
                         selected_chip.rect = help_chip.rect
                         selected_chip.x = help_chip.x
                         selected_chip.y = help_chip.y
@@ -139,18 +176,20 @@ while running:
                             if c.y + 15 == selected_chip.y and  c.x == selected_chip.x:
                                 c.can_move = False
                         is_good = True
-                        is_player_move = False
+
                         Chip.count_of_occupied[selected_chip.position_number] += 1
                         Chip.owner_of_occupied[selected_chip.position_number] = "black"
-
-                        enemy.is_enemy_move = True
-                        enemy.is_enemy_move_throw_dices = False
+                        if (player_moves == 0):
+                            is_player_move = False
+                            enemy.is_enemy_move = True
+                            enemy.is_enemy_move_throw_dices = False
                         break
+
                 if not is_good:
                     selected_chip.rect = previous_coord
 
-            selected_chip = None
-            help_chips = []
+                selected_chip = None
+                help_chips = []
 
 
         elif event.type == pygame.MOUSEMOTION:

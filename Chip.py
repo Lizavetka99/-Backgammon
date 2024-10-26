@@ -37,57 +37,66 @@ class Chip:
             self.position_number = 12
         self.can_move = False
 
-    def create_help_chips(self, dice_values, black_chips, white_chips):
+    def create_help_chips(self, dice_values, black_chips, white_chips, player):
         helps_chips = []
-        if (self.count_moves + dice_values[0] + 1) < 24:
-            x, y = Chip_data.help_chips[(self.position_number + dice_values[0] + 1) % 24]
-            if 12 <= (self.position_number + dice_values[0] + 1) % 24 <= 23:
-                y = 75 + 15 * count_of_occupied[(self.position_number + dice_values[0] + 1) % 24]
-            else:
-                y = 615 - 15 * count_of_occupied[(self.position_number + dice_values[0] + 1) % 24]
-            print('ПЕРВАЯ', x, y)
-            help = Chip(x, y, "help")
-            help.position_number = (dice_values[0] + 1 + self.position_number) % 24
-            is_occupied_by_enemy = False
-            if owner_of_occupied[help.position_number] == "white" and self.owner == "black"\
-                    or owner_of_occupied[help.position_number] == "black" and self.owner == "white":
-                is_occupied_by_enemy = True
-            if not is_occupied_by_enemy:
-                help.current_dice_value = dice_values[0] + 1
-                helps_chips.append(help)
+        is_thrown = False
+        for value in player.dice_values + [sum[player.dice_values]]:
+            if (value + 1 + self.count_moves) == 24:
+                throw_chip = Chip(440, 500, "help")
+                throw_chip.is_throw = True
+                throw_chip.current_dice_value = value + 1
+                helps_chips.append(throw_chip)
+                is_thrown = True
+        if ((dice_values[0] + 1 + self.count_moves) != 24):
+            if (self.count_moves + dice_values[0] + 1) < 24 and dice_values[0] != -1:
+                x, y = Chip_data.help_chips[(self.position_number + dice_values[0] + 1) % 24]
+                if 12 <= (self.position_number + dice_values[0] + 1) % 24 <= 23:
+                    y = 75 + 15 * count_of_occupied[(self.position_number + dice_values[0] + 1) % 24]
+                else:
+                    y = 615 - 15 * count_of_occupied[(self.position_number + dice_values[0] + 1) % 24]
+                print('ПЕРВАЯ', x, y)
+                help = Chip(x, y, "help")
+                help.position_number = (dice_values[0] + 1 + self.position_number) % 24
+                is_occupied_by_enemy = False
+                if owner_of_occupied[help.position_number] == "white" and self.owner == "black"\
+                        or owner_of_occupied[help.position_number] == "black" and self.owner == "white":
+                    is_occupied_by_enemy = True
+                if not is_occupied_by_enemy:
+                    help.current_dice_value = dice_values[0] + 1
+                    helps_chips.append(help)
+        if ((dice_values[1] + 1 + self.count_moves) != 24):
+            if (self.count_moves + dice_values[1] + 1) < 24 and dice_values[0] != dice_values[1] and dice_values[1] != -1:
+                x, y = Chip_data.help_chips[(self.position_number + dice_values[1] + 1) % 24]
+                if 12 <= (self.position_number + dice_values[1] + 1) % 24 <= 23:
+                    y = 75 + 15 * count_of_occupied[(self.position_number + dice_values[1] + 1) % 24]
+                else:
+                    y =615- 15 * count_of_occupied[(self.position_number + dice_values[1] + 1) % 24]
+                print('ВТОРАЯ', x, y)
 
-        if (self.count_moves + dice_values[1] + 1) < 24:
-            x, y = Chip_data.help_chips[(self.position_number + dice_values[1] + 1) % 24]
-            if 12 <= (self.position_number + dice_values[1] + 1) % 24 <= 23:
-                y = 75 + 15 * count_of_occupied[(self.position_number + dice_values[1] + 1) % 24]
-            else:
-                y =615- 15 * count_of_occupied[(self.position_number + dice_values[1] + 1) % 24]
-            print('ВТОРАЯ', x, y)
-
-            help = Chip(x, y, "help")
-            help.position_number = (dice_values[1] + 1 + self.position_number) % 24
-            is_occupied_by_enemy = False
-            if owner_of_occupied[help.position_number] == "white" and self.owner == "black"\
-                    or owner_of_occupied[help.position_number] == "black" and self.owner == "white":
-                is_occupied_by_enemy = True
-            if not is_occupied_by_enemy:
-                help.current_dice_value = dice_values[1] + 1
-                helps_chips.append(help)
-
-        if (self.count_moves + dice_values[0] + dice_values[1] + 2) < 24:
-            x, y = Chip_data.help_chips[(self.position_number + sum(dice_values) + 2) % 24]
-            if 12 <= (self.position_number + sum(dice_values) + 2) % 24 <= 23:
-                y =75+ 15 * count_of_occupied[(self.position_number + sum(dice_values) + 2) % 24]
-            else:
-                y =615- 15 * count_of_occupied[(self.position_number + sum(dice_values) + 2) % 24]
-            print('ТРЕТЬЯ', x, y)
-            help = Chip(x, y, "help")
-            help.position_number = (sum(dice_values) + 2 + self.position_number) % 24
-            is_occupied_by_enemy = False
-            if owner_of_occupied[help.position_number] == "white" and self.owner == "black"\
-                    or owner_of_occupied[help.position_number] == "black" and self.owner == "white":
-                is_occupied_by_enemy = True
-            if not is_occupied_by_enemy:
-                help.current_dice_value = dice_values[0] + dice_values[1] + 2
-                helps_chips.append(help)
+                help = Chip(x, y, "help")
+                help.position_number = (dice_values[1] + 1 + self.position_number) % 24
+                is_occupied_by_enemy = False
+                if owner_of_occupied[help.position_number] == "white" and self.owner == "black"\
+                        or owner_of_occupied[help.position_number] == "black" and self.owner == "white":
+                    is_occupied_by_enemy = True
+                if not is_occupied_by_enemy:
+                    help.current_dice_value = dice_values[1] + 1
+                    helps_chips.append(help)
+        if ((dice_values[0] + dice_values[1] + 2 + self.count_moves) != 24):
+            if (self.count_moves + dice_values[0] + dice_values[1] + 2) < 24 and dice_values[0] != dice_values[1] and dice_values[0] != -1:
+                x, y = Chip_data.help_chips[(self.position_number + sum(dice_values) + 2) % 24]
+                if 12 <= (self.position_number + sum(dice_values) + 2) % 24 <= 23:
+                    y =75+ 15 * count_of_occupied[(self.position_number + sum(dice_values) + 2) % 24]
+                else:
+                    y =615- 15 * count_of_occupied[(self.position_number + sum(dice_values) + 2) % 24]
+                print('ТРЕТЬЯ', x, y)
+                help = Chip(x, y, "help")
+                help.position_number = (sum(dice_values) + 2 + self.position_number) % 24
+                is_occupied_by_enemy = False
+                if owner_of_occupied[help.position_number] == "white" and self.owner == "black"\
+                        or owner_of_occupied[help.position_number] == "black" and self.owner == "white":
+                    is_occupied_by_enemy = True
+                if not is_occupied_by_enemy:
+                    help.current_dice_value = dice_values[0] + dice_values[1] + 2
+                    helps_chips.append(help)
         return helps_chips
