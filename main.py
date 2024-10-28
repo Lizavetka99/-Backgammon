@@ -206,7 +206,7 @@ while running:
     f1 = pygame.font.SysFont('arial', 50)
     text1 = f1.render(str(player.count_of_thrown), 1, (255, 255, 255))
     f2 = pygame.font.SysFont('arial', 50)
-    text2 = f2.render(str(0), 1, (255, 255, 255))
+    text2 = f2.render(str(enemy.throw_count), 1, (255, 255, 255))
 
 
 
@@ -217,6 +217,7 @@ while running:
     screen.blit(score_desk, img_data["score_desk"]["pos"])
     screen.blit(dice_button.texture, dice_button.pos)
     screen.blit(text1, (850, 70))
+    screen.blit(text2, (850, 500))
 
     # spawn chips only once
     if not is_game_start:

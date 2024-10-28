@@ -9,6 +9,7 @@ class Enemy:
         self.is_enemy_move_throw_dices = False
         self.dice_1 = []
         self.dice_2 = []
+        self.throw_count = 0
         self.dice_values = []
     def throw_dices(self):
         self.dice_1, self.dice_2 = Dice.throw(), Dice.throw()
