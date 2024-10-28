@@ -60,8 +60,7 @@ def spawn_chips():
 
 previous_coord = (0, 0)
 while running:
-    if player.count_of_thrown == 15:
-
+    if player.count_of_thrown == 15 or enemy.throw_count == 15:
         break
 
     if enemy.is_enemy_move and not enemy.is_enemy_move_throw_dices:
@@ -137,7 +136,7 @@ while running:
 
                     if selected_chip.rect.colliderect(help_chip):
                         if help_chip.is_throw:
-                            black_chips.remove(selected_chip)
+                           # black_chips.remove(selected_chip)
                             player.count_of_thrown += 1
                         if player.dice_values[0] != player.dice_values[1]:
                             if (sum(player.dice_values) == help_chip.current_dice_value-2):

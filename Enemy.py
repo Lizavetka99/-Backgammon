@@ -46,6 +46,8 @@ class Enemy:
                             Chip.owner_of_occupied[chip.position_number] = None
                     chip.count_moves += helps[random_help].current_dice_value
                     chip.rect = helps[random_help].rect
+                    if (chip.position_number == 24):
+                        self.throw_count += 1
 
                     chip.x = helps[random_help].x
                     chip.y = helps[random_help].y
@@ -71,8 +73,7 @@ class Enemy:
             if any_can_move == False:
                 self.is_enemy_move = False
                 self.is_enemy_move_throw_dices = False
-                moves = 0
-                break
+
         print(Chip.count_of_occupied)
         self.is_enemy_move = False
         return
