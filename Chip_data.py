@@ -29,8 +29,8 @@ textures_dict = {
 white_coordinates_start = [ (160, 615-15*i) for i in range(15)]
 black_coordinates_start = [ (717, 75+15*i) for i in range(15)]
 
-white_chips : List[Chip] = []
-black_chips : List[Chip] = []
+white_chips = []
+black_chips = []
 
 
 

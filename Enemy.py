@@ -77,3 +77,13 @@ class Enemy:
         print(Chip.count_of_occupied)
         self.is_enemy_move = False
         return
+
+    def get_data(self):
+        return {
+            "is_enemy_move": self.is_enemy_move,
+            "is_enemy_move_throw_dices": self.is_enemy_move_throw_dices,
+            "dice_1": self.dice_1,
+            "dice_2": self.dice_2,
+            "throw_count": self.throw_count,
+            "dice_values": self.dice_values
+        }

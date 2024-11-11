@@ -12,4 +12,10 @@ class Player:
 
     def make_move(self):
         dice_sum = sum(self.dice_values)
-        
+
+    def get_data(self):
+        return {
+            "chips": [chip.get_data() for chip in self.chips],
+            "count_of_thrown": self.count_of_thrown,
+            "dice_values": self.dice_values
+        }

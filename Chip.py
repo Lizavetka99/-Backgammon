@@ -100,3 +100,13 @@ class Chip:
                     help.current_dice_value = dice_values[0] + dice_values[1] + 2
                     helps_chips.append(help)
         return helps_chips
+
+    def get_data(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "count_moves": self.count_moves,
+            "owner": self.owner,
+            "position_number": self.position_number,
+            "can_move": self.can_move
+        }
