@@ -116,5 +116,6 @@ class Chip:
             "owner": self.owner,
             "position_number": self.position_number,
             "can_move": self.can_move,
-            "rect": self.rect
+            "rect": self.rect,
+            "current_dice_value": self.current_dice_value
         }

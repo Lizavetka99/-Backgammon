@@ -7,6 +7,7 @@ import Enemy
 import Player
 import image_settings
 import save_load
+import os
 from Dice import Dice
 
 pygame.init()
@@ -17,9 +18,10 @@ screen_height = image_settings.HEIGHT
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # game elements initialization
-player_dict, enemy_dict, white_chips_dict, black_chips_dict = save_load.load_game()
+player_dict, enemy_dict, white_chips_dict, black_chips_dict, count_of_occupied, owner_of_occupied = save_load.load_game()
 print(1, player_dict)
 print(enemy_dict)
+
 print(white_chips_dict)
 print(black_chips_dict)
 player = Player.Player("white")
@@ -41,8 +43,15 @@ if enemy_dict:
     enemy.dice_values = enemy_dict['enemy_dice_values']
 if white_chips_dict:
     white_chips = white_chips_dict
+    Chip_data.white_chips = white_chips
 if black_chips_dict:
     black_chips = black_chips_dict
+    Chip_data.black_chips = black_chips
+if count_of_occupied:
+    Chip.count_of_occupied = count_of_occupied
+if owner_of_occupied:
+    Chip.owner_of_occupied = owner_of_occupied
+
 
 bg_image = pygame.image.load("Assets/background.jpg")
 img_data = image_settings.images_data
@@ -76,7 +85,7 @@ is_player_move_throw_dices = False
 player_moves = 0
 
 
-# Function to spawn chips only once
+
 def spawn_chips():
     Chip_data.spawn_chips(field)
 
@@ -94,6 +103,7 @@ while running:
         break
 
     if enemy.is_enemy_move and not enemy.is_enemy_move_throw_dices:
+
         dice_1_en, dice_2_en = Dice.throw(), Dice.throw()
 
         enemy.dice_values[0] = dice_1_en[1]
@@ -109,11 +119,28 @@ while running:
         is_player_move_throw_dices = False
         is_player_move = True
 
+
+    if pygame.key.get_pressed()[pygame.K_w]:
+        # Проверка, нажата ли кнопка
+        if is_player_move and not is_player_move_throw_dices:
+            dice_1, dice_2 = Dice.throw(), Dice.throw()
+            if dice_1[1] != dice_2[1]:
+                player_moves = 2
+            else:
+                player_moves = 4
+
+            player.dice_values[0] = dice_1[1]
+            player.dice_values[1] = dice_2[1]
+            dice_table.blit(dice_1[0], (Dice.x_pos_1, Dice.y_pos_1))
+            dice_table.blit(dice_2[0], (Dice.x_pos_2, Dice.y_pos_2))
+            is_player_move_throw_dices = True
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             # save_load.save(player, enemy, get_data(white_chips), get_data(black_chips))
             save_load.save(player, enemy, get_data(white_chips), get_data(black_chips), Chip.get_data_list())
             running = False
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Проверка, нажата ли кнопка
             if dice_button.rect.collidepoint(event.pos) and is_player_move and not is_player_move_throw_dices:
@@ -243,12 +270,12 @@ while running:
     screen.blit(text2, (850, 500))
 
     # spawn chips only once
-    if not is_game_start:
+    if not is_game_start and os.path.exists('data.pickle') and os.path.getsize('data.pickle') == 0:
         spawn_chips()
         is_game_start = True
 
     # draw chips
-    for chip in white_chips + black_chips + help_chips:
+    for chip in Chip_data.white_chips + Chip_data.black_chips + help_chips:
         screen.blit(chip.texture, chip.rect)
 
     pygame.display.flip()

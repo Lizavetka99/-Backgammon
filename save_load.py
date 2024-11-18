@@ -12,7 +12,7 @@ def save(player, enemy, white_chips, black_chips, dict_dicts_main):
     black_chips_dict = {'black_chips': black_chips}
     diction = player_dict | enemy_dict
     #print(white_chips)
-    diction = diction | white_chips_dict | black_chips_dict
+    diction = diction | white_chips_dict | black_chips_dict | dict_dicts_main
     print(diction)
     save_game(diction)
 
@@ -33,17 +33,18 @@ def load(data):
                                  white_chips[i]["count_moves"], white_chips[i]["position_number"],
                                  white_chips[i]["can_move"])
         white.rect = white_chips[i]["rect"]
+        white.current_dice_value = white_chips[i]["current_dice_value"]
         w_chips.append(white)
         black = Chip.Chip(black_chips[i]["x"], black_chips[i]["y"], black_chips[i]["owner"],
                                  black_chips[i]["count_moves"], black_chips[i]["position_number"],
                                  black_chips[i]["can_move"])
         black.rect = black_chips[i]["rect"]
+        black.current_dice_value = black_chips[i]["current_dice_value"]
         b_chips.append(black)
-    # Chip.count_of_occupied = data["count_of_occupied"]
-    # Chip.owner_of_occupied = data["owner_of_occupied"]
-    print("мяу", Chip.count_of_occupied)
+    count_of_occupied = data['count_of_occupied']
+    owner_of_occupied = data["owner_of_occupied"]
     #print(data["count_of_occupied"])
-    return player_dict, enemy_dict, w_chips, b_chips
+    return player_dict, enemy_dict, w_chips, b_chips, count_of_occupied, owner_of_occupied
 
 
 def save_game(data):
@@ -59,4 +60,4 @@ def load_game():
         with open('data.pickle', 'rb') as file:
             data = pickle.load(file)
             return load(data)
-    return None, None, None, None
+    return None, None, None, None, None, None
