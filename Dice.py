@@ -15,4 +15,4 @@ class Dice:
     def throw():
         Dice.is_throw = True
         value = random.randint(0, 5)
-        return (Dice.dice_textures[value], value)
+        return Dice.dice_textures[value], value

@@ -39,10 +39,13 @@ def spawn_chips(field):
         white_x, white_y = white_coordinates_start[i]
         black_x, black_y = black_coordinates_start[i]
         white_chips.append(Chip.Chip(white_x, white_y, "white"))
-        print(len(white_chips))
         black_chip = Chip.Chip(black_x, black_y, "black")
         black_chip.position_number = 13 - 1
         black_chips.append(black_chip)
 
     black_chips[CHIPS_AMOUNT - 1].can_move = True
 
+def get_data(self):
+    return {
+        "white_chips": white_chips,
+        "black_chips": black_chips}
